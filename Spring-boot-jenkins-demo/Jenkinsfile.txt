@@ -1,0 +1,124 @@
+pipeline {
+    agent any
+    
+    tools {
+        maven 'Maven-3.9.5'
+        jdk 'JDK-17'
+    }
+    
+    environment {
+        MAVEN_OPTS = '-Xmx1024m'
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Checking out source code...'
+                checkout scm
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                echo 'Building the application...'
+                sh 'mvn clean compile'
+            }
+        }
+        
+        stage('Unit Tests') {
+            steps {
+                echo 'Running unit tests...'
+                sh 'mvn test'
+            }
+            post {
+                always {
+                    junit '**/target/surefire-reports/*.xml'
+                    jacoco(
+                        execPattern: '**/target/jacoco.exec',
+                        classPattern: '**/target/classes',
+                        sourcePattern: '**/src/main/java'
+                    )
+                }
+            }
+        }
+        
+        stage('Code Coverage') {
+            steps {
+                echo 'Generating code coverage report...'
+                sh 'mvn jacoco:report'
+            }
+            post {
+                always {
+                    publishHTML(target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: 'target/site/jacoco',
+                        reportFiles: 'index.html',
+                        reportName: 'JaCoCo Coverage Report'
+                    ])
+                }
+            }
+        }
+        
+        stage('Package') {
+            steps {
+                echo 'Packaging the application...'
+                sh 'mvn package -DskipTests'
+            }
+        }
+        
+        stage('Archive Artifacts') {
+            steps {
+                echo 'Archiving artifacts...'
+                archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+            }
+        }
+        
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    echo 'Running SonarQube analysis...'
+                    // Uncomment and configure when SonarQube is set up
+                    // withSonarQubeEnv('SonarQube') {
+                    //     sh 'mvn sonar:sonar'
+                    // }
+                }
+            }
+        }
+        
+        stage('Deploy to Dev') {
+            when {
+                branch 'develop'
+            }
+            steps {
+                echo 'Deploying to Development environment...'
+                sh 'echo "Deployment commands here"'
+            }
+        }
+        
+        stage('Deploy to Production') {
+            when {
+                branch 'main'
+            }
+            steps {
+                input message: 'Deploy to Production?', ok: 'Deploy'
+                echo 'Deploying to Production environment...'
+                sh 'echo "Production deployment commands here"'
+            }
+        }
+    }
+    
+    post {
+        always {
+            echo 'Cleaning up workspace...'
+            cleanWs()
+        }
+        success {
+            echo 'Pipeline executed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+    }
+}
