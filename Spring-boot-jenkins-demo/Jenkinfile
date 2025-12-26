@@ -30,12 +30,22 @@ pipeline {
         }
 
         stage("Deploy") {
+            input {
+                message 'Enter Environment [1.  Prod, 2. Dev, 3. QA, 4. UAT]'
+                ok 'Deploy'
+                parameters (
+                    string(name: 'ENVIRONMENT', defaultValue: 'Prod', description: 'Environment to Deploy')
+                )
+            }
             steps {
-                echo "Deploy Stage"
+                echo "Deploying into $ENVIRONMENT"
             }
         }
     }
     post {
+        always {
+            echo "Statement printed not matter the previous step results."
+        }
         success {
             echo "Checkout Completed for User $userName"
         }
