@@ -33,9 +33,9 @@ pipeline {
             input {
                 message 'Enter Environment [1.  Prod, 2. Dev, 3. QA, 4. UAT]'
                 ok 'Deploy'
-                parameters (
+                parameters {
                     string(name: 'ENVIRONMENT', defaultValue: 'Prod', description: 'Environment to Deploy')
-                )
+                }
             }
             steps {
                 echo "Deploying into $ENVIRONMENT"
