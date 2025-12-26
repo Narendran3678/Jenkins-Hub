@@ -72,7 +72,7 @@
                 <version>3.5.1</version>
                 <configuration>
                     <to>
-                        <image>jenkinsdemo:v1</image>
+                        <image>jenkinsdemo-v1</image>
                     </to>
                 </configuration>
             </plugin>
