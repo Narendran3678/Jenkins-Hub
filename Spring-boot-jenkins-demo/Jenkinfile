@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        ENV_VAR="NEW TO JENKINS PIPELINES"
+        userName="Narendran"
     }
     stages {
         stage("checkout") {
@@ -33,6 +33,14 @@ pipeline {
             steps {
                 echo "Deploy Stage"
             }
+        }
+    }
+    post {
+        success {
+            echo "Checkout Completed for User $userName"
+        }
+        failure {
+            echo "Checkout Failed for User $userName"
         }
     }
 }
