@@ -21,7 +21,7 @@ pipeline {
         stage("Build") {
             steps {
                 echo "############################# Build Stage Started ###############################"
-                sh 'mvn clean compile'
+                bat 'mvn clean compile'
                 echo "############################# Build Stage Completed #############################"
             }
         }
@@ -29,7 +29,7 @@ pipeline {
         stage("Test") {
             steps {
                 echo "############################# Test Stage Started ###############################"
-                sh 'mvn test'
+                bat 'mvn test'
                 echo "############################# Test Stage Completed #############################"
             }
         }
