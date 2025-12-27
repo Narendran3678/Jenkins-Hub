@@ -3,6 +3,7 @@ pipeline {
     environment {
         userName="Narendran"
     }
+
     stages {
         stage("checkout") {
             steps {
@@ -19,13 +20,17 @@ pipeline {
 
         stage("Build") {
             steps {
-                echo "Build Stage"
+                echo "############################# Build Stage Started ###############################"
+                mvn clean compile
+                echo "############################# Build Stage Completed #############################"
             }
         }
 
         stage("Test") {
             steps {
-                echo "Test Stage"
+                echo "############################# Test Stage Started ###############################"
+                mvn test
+                echo "############################# Test Stage Completed #############################"
             }
         }
 
@@ -42,6 +47,7 @@ pipeline {
             }
         }
     }
+
     post {
         always {
             echo "Statement printed not matter the previous step results."
