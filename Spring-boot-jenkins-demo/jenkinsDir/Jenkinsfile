@@ -95,7 +95,7 @@ pipeline {
 
 void dockerBuildAndPublish() {
     bat """
-    docker login -u narendran3678 -p <Docker_Password>
+    docker login -u narendran3678 -p
     cd %projectName%
     mvn compile jib:dockerBuild
     Docker image push docker.io/narendran3678/jenkinsdemo:v1
