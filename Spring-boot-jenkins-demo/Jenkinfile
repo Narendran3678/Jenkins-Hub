@@ -21,7 +21,10 @@ pipeline {
         stage("Build") {
             steps {
                 echo "############################# Build Stage Started ###############################"
-                bat 'mvn clean compile'
+                 bat '''
+                cd Spring-boot-jenkins-demo
+                mvn clean compile
+                '''
                 echo "############################# Build Stage Completed #############################"
             }
         }
@@ -29,7 +32,10 @@ pipeline {
         stage("Test") {
             steps {
                 echo "############################# Test Stage Started ###############################"
-                bat 'mvn test'
+                bat '''
+                cd Spring-boot-jenkins-demo
+                mvn test
+                '''
                 echo "############################# Test Stage Completed #############################"
             }
         }
