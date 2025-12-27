@@ -61,7 +61,7 @@ pipeline {
         }
         success {
             echo "Pre Process Completed Successfully."
-            archiveArtifacts artifacts: '*.jar'
+            archiveArtifacts artifacts: 'Spring-boot-jenkins-demo/target/*.jar'
             echo "Archiving Jar Files."
         }
         failure {
