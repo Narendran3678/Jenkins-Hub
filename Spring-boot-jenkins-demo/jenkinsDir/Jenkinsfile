@@ -43,7 +43,7 @@ pipeline {
         stage("Build") {
             steps {
                 echo "############################# Build Stage Started ###############################"
-                buildAndPackage projectName: "${projectName}"
+                buildAndPackage()
                 echo "############################# Build Stage Completed #############################"
             }
         }
@@ -90,4 +90,11 @@ pipeline {
             echo "PreProcess Failed"
         }
     }
+}
+
+void buildAndPackage() {
+    bat '''
+    cd %projectName%
+    mvn clean install -DskipTests=true versions:set -DnewVersion='%version%' versions:update-child-modules
+    '''
 }
