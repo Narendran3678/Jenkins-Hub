@@ -1,6 +1,6 @@
-library identifier: 'Spring-boot-jenkins-demo@main',
+library identifier: 'JenkinsSharedHub@main',
         retriever: modernSCM(
-            [$class:'GitSCMSource', remote:"https://github.com/Narendran3678/Jenkins-Hub.git"]
+            [$class:'GitSCMSource', remote:"https://github.com/Narendran3678/JenkinsSharedHub.git"]
         )
 pipeline {
     agent any
