@@ -85,11 +85,21 @@ pipeline {
             echo "Pre Process Completed Successfully."
             archiveArtifacts artifacts: 'Spring-boot-jenkins-demo/target/*.jar'
             echo "Archiving Jar Files."
+            dockerBuildAndPublish()
         }
         failure {
             echo "PreProcess Failed"
         }
     }
+}
+
+void dockerBuildAndPublish() {
+    bat """
+    docker login -u narendran3678 -p dckr_pat_AcdI31S3eCJndmil2QzyL4bUdIc
+    cd %projectName%
+    mvn compile jib:dockerBuild
+    Docker image push docker.io/narendran3678/jenkinsdemo:v1
+    """
 }
 
 void buildAndPackage() {
