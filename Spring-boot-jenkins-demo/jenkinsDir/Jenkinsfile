@@ -43,7 +43,7 @@ pipeline {
         stage("Build") {
             steps {
                 echo "############################# Build Stage Started ###############################"
-                buildAndPackage()
+                buildAndPackage projectName: "${projectName}"
                 echo "############################# Build Stage Completed #############################"
             }
         }
