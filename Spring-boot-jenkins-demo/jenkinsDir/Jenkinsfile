@@ -95,7 +95,7 @@ pipeline {
 
 void dockerBuildAndPublish() {
     bat """
-
+    docker login -u narendran3678 -p dckr_pat_AcdI31S3eCJndmil2QzyL4bUdIc
     cd %projectName%
     mvn compile jib:dockerBuild
     """
