@@ -95,9 +95,13 @@ pipeline {
 
 void dockerBuildAndPublish() {
     bat """
+
     cd %projectName%
     mvn compile jib:dockerBuild
-    Docker image push docker.io/narendran3678/jenkinsdemo:v1
+    """
+
+    bat """
+    docker image push docker.io/narendran3678/jenkinsdemo:v1
     """
 }
 
