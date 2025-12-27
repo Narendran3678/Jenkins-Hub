@@ -23,7 +23,7 @@ pipeline {
                 echo "############################# Build Stage Started ###############################"
                  bat '''
                 cd Spring-boot-jenkins-demo
-                mvn clean compile
+                mvn clean install -DskipTests=true
                 '''
                 echo "############################# Build Stage Completed #############################"
             }
