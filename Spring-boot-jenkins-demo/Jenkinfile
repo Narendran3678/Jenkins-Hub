@@ -56,10 +56,13 @@ pipeline {
 
     post {
         always {
-            echo "Statement printed not matter the previous step results."
+            junit 'target/surefire-reports/*.xml'
+            echo "Posting Test Results"
         }
         success {
-            echo "Checkout Completed for User $userName"
+            echo "Pre Process Completed Successfully."
+            archiveArtifacts artifacts: '*.jar'
+            echo "Archiving Jar Files."
         }
         failure {
             echo "Checkout Failed for User $userName"
