@@ -1,27 +1,20 @@
 pipeline {
     agent any
+    parameters {
+        booleanParam(name:'deployStatus', defaultValue: false, description:'Do you want to deploy?')
+    }
     environment {
         version="1.1"
         checkoutBranch="main"
+        projectName="Spring-boot-jenkins-demo"
     }
 
     stages {
-
 		stage("audit") {
 			parallel {
-                stage('audit-java') {
+                stage('audit') {
                     steps {
-                        bat '''
-                            java --version
-                        '''
-                    }
-                }
-                stage('audit-git-mvn') {
-                    steps {
-                        bat '''
-                            git --version
-                            mvn --version
-                        '''
+                        auditInfo()
                     }
                 }
             }
@@ -44,13 +37,9 @@ pipeline {
         }
 
         stage("Build") {
-
             steps {
                 echo "############################# Build Stage Started ###############################"
-                bat '''
-                cd Spring-boot-jenkins-demo
-                mvn clean install -DskipTests=true versions:set -DnewVersion='%version%' versions:update-child-modules
-                '''
+                buildAndPackage()
                 echo "############################# Build Stage Completed #############################"
             }
         }
@@ -59,7 +48,7 @@ pipeline {
             steps {
                 echo "############################# Test Stage Started ###############################"
                 bat '''
-                cd Spring-boot-jenkins-demo
+                cd %projectName%
                 mvn test
                 '''
                 echo "############################# Test Stage Completed #############################"
@@ -67,6 +56,9 @@ pipeline {
         }
 
         stage("Deploy") {
+            when {
+                expression { return params.deployStatus }
+            }
             input {
                 message 'Enter Environment [1.  Prod, 2. Dev, 3. QA, 4. UAT]'
                 ok 'Deploy'
@@ -94,4 +86,18 @@ pipeline {
             echo "PreProcess Failed"
         }
     }
+}
+void auditInfo() {
+     bat '''
+        java --version
+        git --version
+        mvn --version
+    '''
+}
+
+void buildAndPackage() {
+    bat '''
+    cd %projectName%
+    mvn clean install -DskipTests=true versions:set -DnewVersion='%version%' versions:update-child-modules
+    '''
 }
